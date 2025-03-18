@@ -12,7 +12,7 @@ import com.example.pruebaandroid.menu.ui.MenuScreen
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "splash") {
-        composable("splash") { SplashScreen(navController, hiltViewModel()) }
+        composable("splash") { SplashScreen(navController) }
         composable("login") { LoginScreen(navController) }
         composable("menu") { MenuScreen(navController) }
     }

@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.pruebaandroid.auth.ui.viewmodel.UsuarioViewModel
+import com.example.pruebaandroid.features.auth.ui.viewmodel.UsuarioViewModel
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
