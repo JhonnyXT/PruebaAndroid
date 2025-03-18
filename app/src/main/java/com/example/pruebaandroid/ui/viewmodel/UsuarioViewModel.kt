@@ -69,7 +69,7 @@ class UsuarioViewModel @Inject constructor(
     }
 
 
-    // ✅ Disminuir accesos en Room y sincronizar con Firestore
+    // Disminuir accesos en Room y sincronizar con Firestore
     fun disminuirAccesos(userId: String, context: Context, onLogout: () -> Unit) {
         viewModelScope.launch {
             try {
@@ -110,7 +110,7 @@ class UsuarioViewModel @Inject constructor(
         }
     }
 
-    // ✅ Eliminar usuario de Room y Firestore
+    // Eliminar usuario de Room y Firestore
     fun eliminarUsuario(id: String) {
         viewModelScope.launch {
             usuarioRepository.eliminarUsuario(id)
@@ -120,7 +120,7 @@ class UsuarioViewModel @Inject constructor(
         }
     }
 
-    // ✅ Validar credenciales y guardar usuario en Room y Firestore solo si es nuevo
+    // Validar credenciales y guardar usuario en Room y Firestore solo si es nuevo
     fun validarCredenciales(context: Context, usuario: String, password: String, onResult: (Boolean, Int) -> Unit) {
         val requestQueue = Volley.newRequestQueue(context)
         val url = "https://noderedtest.coordinadora.com/api/v1/validacion-usuario/"
@@ -163,7 +163,7 @@ class UsuarioViewModel @Inject constructor(
         requestQueue.add(request)
     }
 
-    // ✅ Guardar usuario en Firestore
+    // Guardar usuario en Firestore
     private fun guardarUsuarioEnFirestore(usuario: Usuario) {
         val usuarioData = hashMapOf(
             "id" to usuario.id,
@@ -179,7 +179,7 @@ class UsuarioViewModel @Inject constructor(
             .addOnFailureListener { e -> Log.e("Firestore", "Error al guardar usuario en Firestore: ${e.message}") }
     }
 
-    // ✅ Verificar si hay conexión a Internet
+    // Verificar si hay conexión a Internet
     private fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
@@ -212,20 +212,23 @@ class UsuarioViewModel @Inject constructor(
                 Log.d("PDF_RESPONSE", "Respuesta completa de la API: $response")
 
                 try {
-                    // Extraer base64
                     val base64String = response.optString("base64", "")
 
                     if (base64String.isNotEmpty()) {
                         Log.d("PDF_BASE64", "Base64 recibido correctamente, longitud: ${base64String.length}")
 
-                        // Decodificar Base64
                         val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
 
-                        // Guardar el archivo en la carpeta de Descargas
-                        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                        val pdfFile = File(downloadsDir, "pruebacoordi/archivo.pdf")
+                        // Usamos el directorio privado de la app
+                        val targetDir = File(context.getExternalFilesDir(null), "pruebacoordi")
 
-                        pdfFile.parentFile?.mkdirs()
+                        // Crear el directorio si no existe
+                        if (!targetDir.exists()) {
+                            val dirCreated = targetDir.mkdirs()
+                            Log.d("PDF_DIRECTORY", "Directorio creado: $dirCreated")
+                        }
+
+                        val pdfFile = File(targetDir, "archivo.pdf")
 
                         // Escribir el archivo
                         FileOutputStream(pdfFile).use { fos ->
