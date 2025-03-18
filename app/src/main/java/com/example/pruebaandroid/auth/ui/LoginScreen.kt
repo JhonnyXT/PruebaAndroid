@@ -88,6 +88,8 @@ fun LoginScreen(navController: NavController, usuarioViewModel: UsuarioViewModel
                                     popUpTo("login") { inclusive = true }
                                 }
                             } else {
+                                usuario = ""
+                                password = ""
                                 Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
                             }
                         }

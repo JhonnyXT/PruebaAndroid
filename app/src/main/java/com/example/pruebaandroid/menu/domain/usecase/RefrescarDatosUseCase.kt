@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.auth.domain.usecase
+package com.example.pruebaandroid.menu.domain.usecase
 
 import android.content.Context
 import android.util.Base64
@@ -15,10 +15,10 @@ class RefrescarDatosUseCase @Inject constructor() {
         val url = "https://noderedtest.coordinadora.com/api/v1/obtenerimagen/"
         val requestQueue = Volley.newRequestQueue(context)
 
-        val request = JsonObjectRequest(Request.Method.GET, url, null,
+        val request = JsonObjectRequest(
+            Request.Method.GET, url, null,
             { response ->
                 val base64String = response.optString("base64", "")
-                val nuevoPeriodoValidacion = response.optInt("perido_validacion", -1)
                 if (base64String.isNotEmpty()) {
                     val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
                     val file = File(context.getExternalFilesDir(null), "pruebacoordi/archivo.pdf")
