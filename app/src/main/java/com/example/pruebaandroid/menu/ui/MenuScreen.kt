@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.ui.menu
+package com.example.pruebaandroid.menu.ui
 
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.pruebaandroid.ui.viewmodel.UsuarioViewModel
+import com.example.pruebaandroid.auth.ui.viewmodel.UsuarioViewModel
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)

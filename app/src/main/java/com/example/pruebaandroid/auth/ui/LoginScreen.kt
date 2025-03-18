@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.ui.login
+package com.example.pruebaandroid.auth.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.pruebaandroid.ui.viewmodel.UsuarioViewModel
+import com.example.pruebaandroid.auth.ui.viewmodel.UsuarioViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -23,7 +23,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import com.example.pruebaandroid.data.model.Usuario
+import com.example.pruebaandroid.auth.data.model.Usuario
 
 
 @Composable

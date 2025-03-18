@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.ui.splash
+package com.example.pruebaandroid.splash.ui
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.pruebaandroid.ui.viewmodel.UsuarioViewModel
+import com.example.pruebaandroid.auth.ui.viewmodel.UsuarioViewModel
 import kotlinx.coroutines.delay
 
 @Composable

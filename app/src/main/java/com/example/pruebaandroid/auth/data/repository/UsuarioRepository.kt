@@ -1,7 +1,7 @@
-package com.example.pruebaandroid.data.repository
+package com.example.pruebaandroid.auth.data.repository
 
-import com.example.pruebaandroid.data.dao.UsuarioDao
-import com.example.pruebaandroid.data.model.Usuario
+import com.example.pruebaandroid.auth.data.dao.UsuarioDao
+import com.example.pruebaandroid.auth.data.model.Usuario
 import javax.inject.Inject
 
 class UsuarioRepository @Inject constructor(private val usuarioDao: UsuarioDao) {

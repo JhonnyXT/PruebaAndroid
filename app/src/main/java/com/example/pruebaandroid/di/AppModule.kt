@@ -2,9 +2,9 @@ package com.example.pruebaandroid.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.pruebaandroid.data.database.AppDatabase
-import com.example.pruebaandroid.data.dao.UsuarioDao
-import com.example.pruebaandroid.data.repository.UsuarioRepository
+import com.example.pruebaandroid.auth.data.database.AppDatabase
+import com.example.pruebaandroid.auth.data.dao.UsuarioDao
+import com.example.pruebaandroid.auth.data.repository.UsuarioRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

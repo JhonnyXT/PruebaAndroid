@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.data.database
+package com.example.pruebaandroid.auth.data.database
 
 import android.content.Context
 import androidx.room.Database
@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.pruebaandroid.data.dao.UsuarioDao
-import com.example.pruebaandroid.data.model.Usuario
+import com.example.pruebaandroid.auth.data.dao.UsuarioDao
+import com.example.pruebaandroid.auth.data.model.Usuario
 
 @Database(entities = [Usuario::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {

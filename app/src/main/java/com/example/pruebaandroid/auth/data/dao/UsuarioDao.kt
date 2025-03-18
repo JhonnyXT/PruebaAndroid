@@ -1,10 +1,10 @@
-package com.example.pruebaandroid.data.dao
+package com.example.pruebaandroid.auth.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.pruebaandroid.data.model.Usuario
+import com.example.pruebaandroid.auth.data.model.Usuario
 
 @Dao
 interface UsuarioDao {

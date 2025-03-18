@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.data.model
+package com.example.pruebaandroid.auth.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

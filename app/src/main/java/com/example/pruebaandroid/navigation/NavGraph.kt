@@ -1,13 +1,13 @@
-package com.example.pruebaandroid.ui.navigation
+package com.example.pruebaandroid.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.pruebaandroid.ui.splash.SplashScreen
-import com.example.pruebaandroid.ui.login.LoginScreen
-import com.example.pruebaandroid.ui.menu.MenuScreen
+import com.example.pruebaandroid.splash.ui.SplashScreen
+import com.example.pruebaandroid.auth.ui.LoginScreen
+import com.example.pruebaandroid.menu.ui.MenuScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {

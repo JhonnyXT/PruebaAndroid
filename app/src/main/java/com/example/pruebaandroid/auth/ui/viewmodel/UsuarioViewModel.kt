@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.ui.viewmodel
+package com.example.pruebaandroid.auth.ui.viewmodel
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -6,12 +6,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Request
-import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.pruebaandroid.data.model.Usuario
-import com.example.pruebaandroid.data.repository.UsuarioRepository
+import com.example.pruebaandroid.auth.data.model.Usuario
+import com.example.pruebaandroid.auth.data.repository.UsuarioRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
