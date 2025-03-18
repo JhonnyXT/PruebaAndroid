@@ -1,0 +1,42 @@
+name: Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - test  # Solo se ejecuta cuando hay cambios en la rama 'test'
+
+jobs:
+  build:
+    name: Build and Distribute APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # Ajusta según la versión de tu proyecto
+
+      - name: Decode Keystore
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+        run: |
+          echo "$ENCODED_KEYSTORE" | base64 --decode > app/keystore.jks
+
+      - name: Grant execute permission for Gradlew
+        run: chmod +x gradlew
+
+      - name: Build APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK to Firebase Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsJson: ${{ secrets.FIREBASE_CREDENTIALS }}
+          groups: testers
+          file: app/build/outputs/apk/release/app-release.apk
+          releaseNotes: "Commit: ${{ github.sha }}"
