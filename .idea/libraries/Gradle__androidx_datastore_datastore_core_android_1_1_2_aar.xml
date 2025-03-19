@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.datastore:datastore-core-android:1.1.2@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/aa2adcb777a0c9a6d052156ab9dabde3/transformed/datastore-core-release/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-4/aa2adcb777a0c9a6d052156ab9dabde3/transformed/datastore-core-release/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/aa2adcb777a0c9a6d052156ab9dabde3/transformed/datastore-core-release/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.datastore/datastore-core-android/1.1.2/b97b8d7afa5020ee10f7bf2e7ed68beeadfcfc93/datastore-core-android-1.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

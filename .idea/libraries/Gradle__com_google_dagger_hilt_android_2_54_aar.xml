@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.dagger:hilt-android:2.54@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-4/422ca31a458d95e80cab4c3a836fe9e7/transformed/hilt-android-2.54/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/422ca31a458d95e80cab4c3a836fe9e7/transformed/hilt-android-2.54/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.dagger/hilt-android/2.54/f2151895e7844d69d67045f58c47147c842f595a/hilt-android-2.54-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.dagger/hilt-android/2.54/e18f2f91d5dac46b8e3bb1651a2caf9f44c86981/hilt-android-2.54-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
