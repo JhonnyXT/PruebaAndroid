@@ -29,6 +29,9 @@ jobs:
       - name: Grant execute permission for Gradlew
         run: chmod +x gradlew
 
+      - name: Build APK
+        run: ./gradlew assembleRelease
+
       - name: Build APK Location
         run: find app/build/outputs/ -type f
 
@@ -40,4 +43,3 @@ jobs:
           groups: testers
           file: app/build/outputs/apk/release/app-release.apk
           releaseNotes: "Versión: 1.0.${{ github.run_number }} - Commit: ${{ github.sha }}"
-
