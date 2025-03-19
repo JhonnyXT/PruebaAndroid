@@ -1,4 +1,4 @@
-# Prueba Técnica - Desarrollador Android con Kotlin
+# Prueba Técnica - Desarrollador Android con Kotlin y Jetpack Compose
 
 ## 📌 Objetivo
 Desarrollar una aplicación Android que implemente autenticación, almacenamiento de datos en **Room Database** y **Firestore**, manejo de archivos en **PDF**, mapas con **Google Maps**, integración con **Firebase Authentication**, y despliegue continuo en **Firebase Distribution**.
