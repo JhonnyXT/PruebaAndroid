@@ -3,7 +3,7 @@ name: Firebase App Distribution
 on:
   push:
     branches:
-      - test  # Solo se ejecuta cuando hay cambios en la rama 'test'
+      - test
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'  # Ajusta según la versión de tu proyecto
+          java-version: '11'
 
       - name: Decode Keystore
         env:
@@ -29,8 +29,8 @@ jobs:
       - name: Grant execute permission for Gradlew
         run: chmod +x gradlew
 
-      - name: Build APK
-        run: ./gradlew assembleRelease
+      - name: Build APK Location
+        run: find app/build/outputs/ -type f
 
       - name: Upload APK to Firebase Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
