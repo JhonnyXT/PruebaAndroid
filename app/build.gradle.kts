@@ -108,6 +108,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.turbine.test.flows)
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
     // Room Database
     implementation(libs.androidx.room.runtime)
