@@ -4,7 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.pruebaandroid.auth.data.model.Usuario
-import com.example.pruebaandroid.features.auth.ui.viewmodel.UsuarioViewModel
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

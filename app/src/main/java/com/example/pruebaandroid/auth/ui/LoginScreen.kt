@@ -23,11 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.pruebaandroid.auth.data.model.Usuario
-import com.example.pruebaandroid.features.auth.ui.viewmodel.UsuarioViewModel
-
+import com.example.pruebaandroid.auth.domain.AuthViewModel
 
 @Composable
-fun LoginScreen(navController: NavController, usuarioViewModel: UsuarioViewModel = hiltViewModel()) {
+fun LoginScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -72,7 +74,7 @@ fun LoginScreen(navController: NavController, usuarioViewModel: UsuarioViewModel
                 if (usuario.isNotEmpty() && password.isNotEmpty()) {
                     isLoading = true
                     scope.launch {
-                        usuarioViewModel.validarCredenciales(context, usuario, password) { loginExitoso, periodoValidacion ->
+                        authViewModel.validarCredenciales(context, usuario, password) { loginExitoso, periodoValidacion ->
                             isLoading = false
                             if (loginExitoso) {
                                 val nuevoUsuario = Usuario(
@@ -81,9 +83,7 @@ fun LoginScreen(navController: NavController, usuarioViewModel: UsuarioViewModel
                                     email = "$usuario@gmail.com",
                                     periodoValidacion = periodoValidacion
                                 )
-
-                                usuarioViewModel.insertarUsuario(nuevoUsuario)
-
+                                authViewModel.insertarUsuario(nuevoUsuario)
                                 navController.navigate("menu") {
                                     popUpTo("login") { inclusive = true }
                                 }

@@ -21,14 +21,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.pruebaandroid.features.auth.ui.viewmodel.UsuarioViewModel
+import com.example.pruebaandroid.auth.domain.AuthViewModel
+import com.example.pruebaandroid.menu.domain.MenuViewModel
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuScreen(navController: NavController, usuarioViewModel: UsuarioViewModel = hiltViewModel()) {
+fun MenuScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel = hiltViewModel(),
+    menuViewModel: MenuViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
-    val usuario by usuarioViewModel.usuario.collectAsState()
+    val usuario by authViewModel.usuario.collectAsState()
     val listaPdf = remember { mutableStateListOf<String>() }
     var isDownloading by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -36,9 +41,9 @@ fun MenuScreen(navController: NavController, usuarioViewModel: UsuarioViewModel 
     val yaDescontado = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        val usuarioActual = usuarioViewModel.obtenerUsuarioActual()
+        val usuarioActual = authViewModel.obtenerUsuarioActual()
         if (usuarioActual != null) {
-            usuarioViewModel.obtenerUsuario(usuarioActual)
+            authViewModel.obtenerUsuario()
         } else {
             navController.navigate("login") { popUpTo("menu") { inclusive = true } }
         }
@@ -49,11 +54,11 @@ fun MenuScreen(navController: NavController, usuarioViewModel: UsuarioViewModel 
             if (!yaDescontado.value) {
                 yaDescontado.value = true
                 if (currentUser.periodoValidacion > 0) {
-                    usuarioViewModel.disminuirAccesos(currentUser.id, context) {
+                    authViewModel.disminuirAccesos(currentUser.id, context) {
                         navController.navigate("login") { popUpTo("menu") { inclusive = true } }
                     }
                 } else {
-                    usuarioViewModel.cerrarSesion(currentUser.id) {
+                    authViewModel.cerrarSesion(currentUser.id) {
                         navController.navigate("login") { popUpTo("menu") { inclusive = true } }
                     }
                 }
@@ -68,12 +73,12 @@ fun MenuScreen(navController: NavController, usuarioViewModel: UsuarioViewModel 
                 actions = {
                     IconButton(onClick = {
                         isRefreshing = true
-                        usuarioViewModel.refrescarDatos(context) { success, filePath ->
+                        menuViewModel.refrescarDatos(context) { success, filePath ->
                             isRefreshing = false
                             if (success && filePath != null) {
                                 listaPdf.clear()
                                 listaPdf.add(filePath)
-                                pdfPages = renderPdfPages(filePath) // Volver a renderizar el PDF actualizado
+                                pdfPages = renderPdfPages(filePath)
                             } else {
                                 Toast.makeText(context, "No hay nuevos datos", Toast.LENGTH_SHORT).show()
                             }
@@ -103,11 +108,11 @@ fun MenuScreen(navController: NavController, usuarioViewModel: UsuarioViewModel 
             Button(
                 onClick = {
                     isDownloading = true
-                    usuarioViewModel.descargarYGuardarPDF(context) { success, filePath ->
+                    menuViewModel.descargarYGuardarPDF(context) { success, filePath ->
                         isDownloading = false
                         if (success && filePath != null) {
                             listaPdf.add(filePath)
-                            pdfPages = renderPdfPages(filePath) // Cargar todas las páginas
+                            pdfPages = renderPdfPages(filePath)
                         } else {
                             Toast.makeText(context, "Error al descargar el archivo", Toast.LENGTH_SHORT).show()
                         }
@@ -127,7 +132,6 @@ fun MenuScreen(navController: NavController, usuarioViewModel: UsuarioViewModel 
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Lista vertical con todas las páginas del PDF
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(pdfPages) { bitmap ->
                     Image(

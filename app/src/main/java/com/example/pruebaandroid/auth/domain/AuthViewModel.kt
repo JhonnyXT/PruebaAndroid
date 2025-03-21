@@ -1,4 +1,4 @@
-package com.example.pruebaandroid.features.auth.ui.viewmodel
+package com.example.pruebaandroid.auth.domain
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,9 +7,11 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pruebaandroid.auth.data.model.Usuario
-import com.example.pruebaandroid.auth.domain.usecase.*
-import com.example.pruebaandroid.menu.domain.usecase.DescargarPDFUseCase
-import com.example.pruebaandroid.menu.domain.usecase.RefrescarDatosUseCase
+import com.example.pruebaandroid.auth.domain.usecase.DisminuirAccesosUseCase
+import com.example.pruebaandroid.auth.domain.usecase.EliminarUsuarioUseCase
+import com.example.pruebaandroid.auth.domain.usecase.InsertarUsuarioUseCase
+import com.example.pruebaandroid.auth.domain.usecase.ObtenerUsuarioUseCase
+import com.example.pruebaandroid.auth.domain.usecase.ValidarCredencialesUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,27 +20,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UsuarioViewModel @Inject constructor(
+class AuthViewModel @Inject constructor(
     private val obtenerUsuarioUseCase: ObtenerUsuarioUseCase,
     private val insertarUsuarioUseCase: InsertarUsuarioUseCase,
     private val disminuirAccesosUseCase: DisminuirAccesosUseCase,
     private val eliminarUsuarioUseCase: EliminarUsuarioUseCase,
-    private val validarCredencialesUseCase: ValidarCredencialesUseCase,
-    private val descargarPDFUseCase: DescargarPDFUseCase,
-    private val refrescarDatosUseCase: RefrescarDatosUseCase
+    private val validarCredencialesUseCase: ValidarCredencialesUseCase
 ) : ViewModel() {
 
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     private val _usuario = MutableStateFlow<Usuario?>(null)
     val usuario: StateFlow<Usuario?> = _usuario
 
-    fun obtenerUsuario(id: String) {
-        viewModelScope.launch {
-            _usuario.value = obtenerUsuarioUseCase(id)
-        }
-    }
-
-    fun obtenerUsuarioDesdeRoom() {
+    fun obtenerUsuario() {
         viewModelScope.launch {
             _usuario.value = obtenerUsuarioUseCase(null)
         }
@@ -54,6 +48,15 @@ class UsuarioViewModel @Inject constructor(
             _usuario.value = usuario
             guardarUsuarioEnFirestore(usuario)
         }
+    }
+
+    fun validarCredenciales(
+        context: Context,
+        usuario: String,
+        password: String,
+        onResult: (Boolean, Int) -> Unit
+    ) {
+        validarCredencialesUseCase.execute(context, usuario, password, onResult)
     }
 
     fun disminuirAccesos(userId: String, context: Context, onLogout: () -> Unit) {
@@ -82,24 +85,27 @@ class UsuarioViewModel @Inject constructor(
         }
     }
 
-    fun eliminarUsuario(userId: String, onLogout: () -> Unit) {
+    fun cerrarSesion(userId: String, onLogout: () -> Unit) {
+        viewModelScope.launch {
+            eliminarUsuario(userId, onLogout)
+
+            firestore.collection("usuario_login").document(userId).delete()
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Usuario eliminado de Firestore")
+                    onLogout()
+                }
+                .addOnFailureListener {
+                    Log.e("Firestore", "Error al eliminar usuario: ${it.message}")
+                }
+        }
+    }
+
+    private fun eliminarUsuario(userId: String, onLogout: () -> Unit) {
         viewModelScope.launch {
             eliminarUsuarioUseCase(userId)
             firestore.collection("usuario_login").document(userId).delete()
             onLogout()
         }
-    }
-
-    fun validarCredenciales(context: Context, usuario: String, password: String, onResult: (Boolean, Int) -> Unit) {
-        validarCredencialesUseCase.execute(context, usuario, password, onResult)
-    }
-
-    fun descargarYGuardarPDF(context: Context, onResult: (Boolean, String?) -> Unit) {
-        descargarPDFUseCase.execute(context, onResult)
-    }
-
-    fun refrescarDatos(context: Context, onResult: (Boolean, String?) -> Unit) {
-        refrescarDatosUseCase.execute(context, onResult)
     }
 
     private fun guardarUsuarioEnFirestore(usuario: Usuario) {
@@ -121,20 +127,5 @@ class UsuarioViewModel @Inject constructor(
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
-    }
-
-    fun cerrarSesion(userId: String, onLogout: () -> Unit) {
-        viewModelScope.launch {
-            eliminarUsuario(userId, onLogout) // Eliminar de Room
-
-            firestore.collection("usuario_login").document(userId).delete()
-                .addOnSuccessListener {
-                    Log.d("Firestore", "Usuario eliminado de Firestore")
-                    onLogout() // Redirigir al Login
-                }
-                .addOnFailureListener {
-                    Log.e("Firestore", "Error al eliminar usuario: ${it.message}")
-                }
-        }
     }
 }
