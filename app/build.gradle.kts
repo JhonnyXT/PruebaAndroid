@@ -128,13 +128,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // UI Testing para Jetpack Compose
+    // UI Testing para Jetpack Compose
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
     // Hilt para pruebas instrumentadas
     androidTestImplementation(libs.dagger.hilt.testing)
-    kaptAndroidTest(libs.dagger.hilt.compiler.testing)
+    kaptAndroidTest(libs.dagger.hilt.compiler)
 
     // JUnit para pruebas instrumentadas
     androidTestImplementation(libs.androidx.test.ext.junit)
