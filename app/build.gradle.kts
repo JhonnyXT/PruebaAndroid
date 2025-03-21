@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.google.devtools)
+    alias(libs.plugins.kotlin.kapt)
     id("com.google.gms.google-services")
 }
 
@@ -18,7 +19,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.pruebaandroid.HiltTestRunner"
     }
 
     signingConfigs {
@@ -125,4 +126,23 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // UI Testing para Jetpack Compose
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Hilt para pruebas instrumentadas
+    androidTestImplementation(libs.dagger.hilt.testing)
+    kaptAndroidTest(libs.dagger.hilt.compiler.testing)
+
+    // JUnit para pruebas instrumentadas
+    androidTestImplementation(libs.androidx.test.ext.junit)
+
+    // Test Runner y Rules
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
+
+    // Coroutines Test (para pruebas con Flow y suspend)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

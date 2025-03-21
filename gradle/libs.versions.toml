@@ -19,11 +19,15 @@ ksp = "2.1.0-1.0.29"
 hiltNavigation = "1.2.0"
 junitJupiter = "5.8.2"
 mockk = "1.13.8"
-coroutinesTest = "1.10.1"
 turbineTest = "1.2.0"
 datastorePreferences = "1.1.2"
 testCoreKtxVersion = "1.6.1"
 room = "2.6.1"
+hiltTesting = "2.44"
+junitExt = "1.1.5"
+testRunner = "1.5.2"
+testRules = "1.5.0"
+coroutinesTest = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +68,17 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeBom" }
 
+# Hilt para pruebas instrumentadas
+dagger-hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hiltTesting" }
+dagger-hilt-compiler-testing = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltTesting" }
+
+# JUnit para tests instrumentados
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "testRunner" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "testRules" }
+
+# Coroutines Test (para pruebas con Flow y suspend)
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -72,3 +87,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-devtools = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
