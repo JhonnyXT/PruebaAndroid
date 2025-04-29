@@ -13,10 +13,14 @@ import com.example.pruebaandroid.auth.domain.usecase.InsertarUsuarioUseCase
 import com.example.pruebaandroid.auth.domain.usecase.ObtenerUsuarioUseCase
 import com.example.pruebaandroid.auth.domain.usecase.ValidarCredencialesUseCase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +33,7 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val firestore by lazy { FirebaseFirestore.getInstance() }
+    private val auth by lazy { FirebaseAuth.getInstance() }
     private val _usuario = MutableStateFlow<Usuario?>(null)
     val usuario: StateFlow<Usuario?> = _usuario
 
@@ -119,13 +124,60 @@ class AuthViewModel @Inject constructor(
 
         firestore.collection("usuario_login").document(usuario.id)
             .set(usuarioData)
-            .addOnSuccessListener { Log.d("Firestore", "Usuario guardado en Firestore") }
-            .addOnFailureListener { e -> Log.e("Firestore", "Error al guardar usuario: ${e.message}") }
+            .addOnSuccessListener { 
+                Log.d("Firestore", "Usuario guardado en Firestore")
+            }
+            .addOnFailureListener { e -> 
+                Log.e("Firestore", "Error al guardar usuario: ${e.message}")
+                // Si falla el guardado en Firestore, al menos mantenemos el usuario en la base de datos local
+            }
     }
 
     private fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
+    }
+
+    suspend fun signInWithGoogle(account: GoogleSignInAccount, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        try {
+            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            val authResult = auth.signInWithCredential(credential).await()
+            
+            authResult.user?.let { firebaseUser ->
+                val nuevoUsuario = Usuario(
+                    id = firebaseUser.uid,
+                    nombre = firebaseUser.displayName ?: "Usuario Google",
+                    email = firebaseUser.email ?: "",
+                    periodoValidacion = 5
+                )
+
+                insertarUsuario(nuevoUsuario)
+
+                try {
+                    guardarUsuarioEnFirestore(nuevoUsuario)
+                } catch (e: Exception) {
+                    Log.e("Firestore", "Error al guardar en Firestore: ${e.message}")
+                }
+                
+                onSuccess()
+            } ?: run {
+                onError("Error al obtener información del usuario")
+            }
+        } catch (e: Exception) {
+            Log.e("GoogleSignIn", "Error en la autenticación con Google: ${e.message}")
+            Log.e("GoogleSignIn", "Stack trace: ${e.stackTraceToString()}")
+            when (e) {
+                is com.google.firebase.auth.FirebaseAuthException -> {
+                    when (e.errorCode) {
+                        "ERROR_INVALID_CREDENTIAL" -> onError("Credenciales inválidas")
+                        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> onError("La cuenta ya existe con diferentes credenciales")
+                        "ERROR_CREDENTIAL_ALREADY_IN_USE" -> onError("Las credenciales ya están en uso")
+                        else -> onError("Error de autenticación: ${e.errorCode}")
+                    }
+                }
+                else -> onError("Error desconocido: ${e.message}")
+            }
+        }
     }
 }
